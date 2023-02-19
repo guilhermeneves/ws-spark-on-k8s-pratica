@@ -38,7 +38,10 @@ Link do DockerHub:
 
 #### Passo 2
 
-Agora, vamos instalar a engine do Docker que permitirá criar imagens. No link abaixo encontra-se instruções para o Linux Ubuntu
+Agora, vamos instalar a engine do Docker que permitirá criar imagens. 
+* https://www.loom.com/share/166cdb6c6b1b447eb0077c769a60c865
+
+No link abaixo encontra-se instruções de instalação para o Linux Ubuntu
 * https://docs.docker.com/engine/install/ubuntu/
 
 
