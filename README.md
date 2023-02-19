@@ -17,7 +17,7 @@ O Nosso principal objetivo é que você se divirta enquanto aprende e possa ter 
 
 <p align="center">
   <a href="" rel="noopener">
-    <img src="https://github.com/owshq-academy/ws-mds-na-pratica/blob/main/ppts/spok-roadmap.png" alt="Project logo">
+    <img src="https://github.com/owshq-academy/ws-spark-on-k8s-pratica/blob/main/ppts/spok-roadmap.png" alt="Project logo">
  </a>
 </p>
 
