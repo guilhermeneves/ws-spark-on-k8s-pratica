@@ -65,6 +65,7 @@ Para instalação de ferramentas no cluster kubernetes, utilizaremos também o H
 Plugins que facilitam a interação com Kubernetes
 * https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
 * https://github.com/ahmetb/kubectx
+* https://k8slens.dev/
 
 #### Passo 4
 
