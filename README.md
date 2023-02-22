@@ -61,6 +61,10 @@ Link de instalação do Kind
 Para instalação de ferramentas no cluster kubernetes, utilizaremos também o Helm. Você pode fazer o download no link abaixo
 * https://helm.sh/docs/intro/install/
 
+#### [Dica Bônus]
+Plugins que facilitam a interação com Kubernetes
+* https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
+* https://github.com/ahmetb/kubectx
 
 #### Passo 4
 
