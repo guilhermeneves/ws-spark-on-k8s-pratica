@@ -17,7 +17,7 @@ O Nosso principal objetivo é que você se divirta enquanto aprende e possa ter 
 
 <p align="center">
   <a href="" rel="noopener">
-    <img src="https://github.com/owshq-academy/ws-mds-na-pratica/blob/main/ppts/spok-roadmap.png" alt="Project logo">
+    <img src="https://github.com/owshq-academy/ws-spark-on-k8s-pratica/blob/main/ppts/spok-roadmap.png" alt="Project logo">
  </a>
 </p>
 
@@ -38,7 +38,10 @@ Link do DockerHub:
 
 #### Passo 2
 
-Agora, vamos instalar a engine do Docker que permitirá criar imagens. No link abaixo encontra-se instruções para o Linux Ubuntu
+Agora, vamos instalar a engine do Docker que permitirá criar imagens. 
+* https://www.loom.com/share/166cdb6c6b1b447eb0077c769a60c865
+
+No link abaixo encontra-se instruções de instalação para o Linux Ubuntu
 * https://docs.docker.com/engine/install/ubuntu/
 
 
@@ -54,7 +57,15 @@ Link de instalação do Kind
   * Sinta-se livre para utilizar outra ferramenta, como o Minikube ou k3s
   * https://minikube.sigs.k8s.io/docs/start/ - Link do Minikube
   * https://k3s.io/ - Link do k3s
+  
+Para instalação de ferramentas no cluster kubernetes, utilizaremos também o Helm. Você pode fazer o download no link abaixo
+* https://helm.sh/docs/intro/install/
 
+#### [Dica Bônus]
+Plugins que facilitam a interação com Kubernetes
+* https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
+* https://github.com/ahmetb/kubectx
+* https://k8slens.dev/
 
 #### Passo 4
 
@@ -66,3 +77,9 @@ Como criar uma conta grátis na AWS:
 Link da página
 * https://aws.amazon.com/free/
 
+Além disso, instale as seguintes ferramentas para interação com a AWS
+* https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+* https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html
+
+
+É isso, as demais dicas e instruções serão apresentadas no dia do Workshop. ;D
