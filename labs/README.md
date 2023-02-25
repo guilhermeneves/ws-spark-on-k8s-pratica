@@ -94,6 +94,7 @@ http://prometheus-server.monitoring.svc.cluster.local
 Referências/Dicas
 
 *[https://aws.amazon.com/blogs/containers/best-practices-for-running-spark-on-amazon-eks/](https://aws.amazon.com/blogs/containers/best-practices-for-running-spark-on-amazon-eks/)
+
 *[https://aws.amazon.com/blogs/containers/optimizing-spark-performance-on-kubernetes/](https://aws.amazon.com/blogs/containers/optimizing-spark-performance-on-kubernetes/)
 * [https://www.amazon.com/Managing-Cloud-Native-Data-Kubernetes/dp/1098111397](https://www.amazon.com/Managing-Cloud-Native-Data-Kubernetes/dp/1098111397)
 * https://www.amazon.com/Managing-Cloud-Native-Data-Kubernetes/dp/1098111397
