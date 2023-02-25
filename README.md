@@ -83,3 +83,4 @@ Além disso, instale as seguintes ferramentas para interação com a AWS
 
 
 É isso, as demais dicas e instruções serão apresentadas no dia do Workshop. ;D
+
