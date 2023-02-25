@@ -98,3 +98,5 @@ Referências/Dicas
 * [https://www.amazon.com/Managing-Cloud-Native-Data-Kubernetes/dp/1098111397](https://www.amazon.com/Managing-Cloud-Native-Data-Kubernetes/dp/1098111397)
 * https://www.amazon.com/Managing-Cloud-Native-Data-Kubernetes/dp/1098111397
 * https://dok.community/
+* https://spot.io/blog/ocean-for-apache-spark-serverless-spark-now-available-on-aws/
+* https://docs.datamechanics.co/docs/welcome
