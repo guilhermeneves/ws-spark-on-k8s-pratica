@@ -83,3 +83,178 @@ Além disso, instale as seguintes ferramentas para interação com a AWS
 
 
 É isso, as demais dicas e instruções serão apresentadas no dia do Workshop. ;D
+
+___
+
+## Anotações 25.02.2023:
+
+- DataMechanics criadores do spark on Kubernets, fundaram empresa spotnetapp
+
+- Virtualização (Server -> OS -> Hypervisor -> VM -> Guest OS ->App) x Conteinerização (Server -> OS -> Container Runtime -> App)
+- Container: Isolamento, Efemero, Stateless, Inicialização rápida, Portateis
+- Docker um dos produtos para rodar containers
+
+- Imagem: é um Template com instruçoes, analogia ISO de uma imagem linux ou classe em POO. criada a partir de um dockerfile por exemplo. Numero de camadas N formando uma pilha read-only
+- Container: Cria uma camada extra no topo da pilha Read/Write
+
+Persistência Container:
+
+- Bind Mount: Diretorio Host <-> Container (Problema vinculo maquina host, recomendado apenas para ambiente dev/local) vinculado ao host nao escala e pode perder info
+
+- TMPFS: Utiliza memoria do container para armazenar estado, pode ser problema principalmente para spark, pois usa memoria e fica limitado a memoria, pode ser util por exemplo, cache muito rapido.
+
+- Volumes: É uma forma que o docker fornece criar uma camada em cima do host para segregar um diretorio para o container. (Recomendado para escala, todos os container consegue acessar o mesmo volume)
+
+## Kubernetes
+
+- Opensource desenvolvido pela google em Go
+  - Alta dispobinilidade
+  - Escalabilidade
+  - Disaster Recovery
+  - Microservices
+  - Instrucoes declarativas
+
+### Ambiente
+- kind
+- minikube
+- k3s (mais leve IoT Raspberry)
+- EKS (gerenciados)
+- AKS (gerenciados)
+- GKE (gerenciados)
+
+### Arquitetura e componenentes
+- Control Plane: Gerencia cluster
+- Node
+- Kubeletet: Gerencia o nó
+- Container (Docker, etc...)
+
+### Interface Usuario
+- kubectl
+- lens
+- k9s
+
+### POD
+menor unidade do kubernetes, ambiente para execução dos containers, podem conter varios containers
+
+- ReplicaSet: Garante x replicas do POD rodando. se definir 3 e 1 cair sobe mais 1 auto.
+- Deployments:
+  - Blue-green: 1 pod por vez da v1 para v2, só apos todos os pods forem para v2 mata os da v1 
+  - Canary: implementa v1 e v2, e direciona pelo load balancer uma % do load para cada ambiente
+
+  ### Persistencia
+
+  - emptydir similar com tmpfs (parecido docker)
+  - hostpath similar com bindmount
+  - Persistent Volumes (PV)
+  - Persistent Volume Claine (PVC)
+
+  ### Yaml
+  em prod sempre usa deployment estrutura mais alto nivel
+  - kind: estrutura hierarquica exemplo:
+    - deployment
+      - replicaset/daemonsets/statefulsets
+        - pod
+  - metadada: 
+
+## Spark on Kubernetes
+
+Cluster managers: Standalone, Mesos, Yarn, Kubernetes
+
+Cluster Manager -> Driver (Context) -> Worker Node (Executor->task->cache)
+
+Performance Yarn x Kubernetes 
+
+Segundo TPC-DS a performance de ambos é semelhante não a perdas significativas. Alguns casos um pouco melhor e no outro pouco pior.
+
+**Precisa instalar o Spark-Operator no Cluster Antes, tem no README especificando o namespace**
+
+Spark-submit -> Kubernetes-core (scheduler-API SERVER) -> pods (exeuctor/driver)
+
+- Pode ser feito via submit (nao recomendado)
+
+  - spark-submit --master k8s... --conf spark.executor.instances=5 --conf spark.kubernetes.container.image=<spark-image>
+
+- Recomendado Spark Operator
+
+### Spark Operator
+
+Custom Resrouce Definirion (CRDs) criado especifico para Spark criado pela google (spark-operator)
+
+Temos o spark job (script pyspark) e o manifesto do job spark (onde será configurado os drivers/executors/etc..)
+
+`kubectl apply -f meu-job.yaml`
+```
+kind: SparkApplication
+
+metadata
+ - name
+ - namespace (pode organizar os jobs dentro de 1 namespace)
+
+spec:
+ - type: Scala
+ - image: ˜teste/spark:3.1˜
+ - imagePullPolicy: IfNotPresent
+ - sparkVersion: """
+driver:
+ cores: 1
+ coreLimit: ˜1200m˜
+ labels:
+  version:
+executor:
+ cores: 1
+ instances: 2
+ memory: "512m"
+```
+
+### Configuração Spot/on-demand
+
+Cluster Spark (Node Affinity): Definir afinidades para os PODS, por exemplo, mandar drivers para on-demand e executors para spots.
+
+### Jobs na mesma AZ
+
+Drivers se for para Az1 e Executors para Az2 pode ser ruim shuffle custo transfer.
+Driver e Executors na mesma Az1 melhor sem custo de transfer.
+
+### Escalabilidade
+
+Karpenter vs Cluster Autoscaler
+
+Karpenter: (muito rapido, já atrela o pod ao node criado, nao precisa de intermedio do autoscaler para avaliar se tem node group)
+- Provisiona nodes com base em pods pendentes
+- Escala de acordo com o que foi solicitado
+- Provisioner -> regras para controle de escala
+- Vincula o pod diretamente
+- Apenas AWS por enquanto
+
+Cluster Autoscaler:
+- Managed Node Groups (Auto Scaling Group) - Diferença entre o Karpenter que não precisa de um grupo especifico.
+- Tenta manter balanceamento entre AZ **ponto atencao**
+
+### S3 != HDFS
+
+principalmente diferença rename, object storage utitiliza mimic rename (copy/delete) mais custoso.
+
+- Magic Commiter: recomendado
+ - dez - 2020 : AWS s3 se torna consistente
+ - maior performance
+ - necessario especificar na build da imagem spark (S3A Commiter)
+
+ Cada tecnologia tem seu próprio commiter: EMRFS, Iceberg, DeltaLake, Hudi... caso use alguma dessas tecnologias use o da tecnologia e nao o magic commiter S3A.
+
+ ### Alocacao Recursos Kubernetes
+
+ **Cuidado**: Nem todo o espaço do K8s Node é alocavel, existe espaço revervado de sistema e K8s, por exemplo alocar 3400 mcores ao inves de 4000 mcores
+
+ ## ConfigMaps
+
+ - Desacoplar configurações
+ - Informações não confidenciais
+
+ ## Logs
+- Dev logInfo
+- Hom Warn
+- Prod Error
+
+### Mutation admission Webhook
+
+se ele estiver habilitado consegue aplicar uma mutação em tempo de execução, boa partes dos componente utilizados precisa desse recurso habilitado, por exemplo node affinity para o executor subi spots.
