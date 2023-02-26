@@ -1,0 +1,47 @@
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  annotations: {}
+  name: test-verbosidade-job
+  namespace: processing
+spec:
+  type: Python
+  mode: cluster
+  image: 'tiagotxm/spark:v3.1.1-prometheus'
+  imagePullPolicy: IfNotPresent
+  sparkConf:
+    spark.sql.streaming.metricsEnabled: 'true'
+  mainClass: org.apache.spark.examples.SparkPi
+  mainApplicationFile: "local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar"
+  timeToLiveSeconds: 120
+  sparkVersion: "3.1.1"
+  restartPolicy:
+    type: Never
+  volumes:
+    - name: config-vol
+      configMap:
+        name: log4j-spark-cm
+        items:
+          - key: "log4j.properties"
+            path: "log4j.properties"
+  driver:
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"
+    volumeMounts:
+      - name: config-vol
+        mountPath: /opt/spark/configmap
+    javaOptions: "-Dlog4j.configuration=file:///opt/spark/configmap/log4j.properties"
+    labels:
+      version: 3.1.1
+    serviceAccount: spark-operator-spark
+  executor:
+    cores: 1
+    instances: 1
+    memory: "512m"
+    volumeMounts:
+      - name: config-vol
+        mountPath: /opt/spark/configmap
+    javaOptions: "-Dlog4j.configuration=file:///opt/spark/configmap/log4j.properties"
+    labels:
+      version: 3.1.1
